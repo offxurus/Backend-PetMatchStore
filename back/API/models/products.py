@@ -50,7 +50,7 @@ class Products(object):
         Get products
         """
         return MainModule.get_firestore_db().collection(
-            cls._collection_name).limit(16).stream()
+            cls._collection_name).limit(10).stream()
     
     @classmethod
     def get_product(cls, product_id):

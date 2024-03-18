@@ -41,7 +41,7 @@ API.add_resource(UsersHandler, '/users', endpoint='users')
 API.add_resource(UserHandler, '/user/<user_id>', endpoint='user')
 API.add_resource(UserSignInHandler, '/user-sign-in', endpoint='user-sign-in')
 API.add_resource(ProductsHandler, '/products', endpoint='products')
-API.add_resource(ProductHandler, '/product/<product_id>', endpoint='product')
+API.add_resource(ProductHandler, '/products/<product_id>', endpoint='product')
 API.add_resource(UsersSearchHandler, '/search', endpoint='search')
 
 

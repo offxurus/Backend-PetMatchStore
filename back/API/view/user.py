@@ -106,6 +106,7 @@ class UserSignInHandler(Resource):
                         response['id'] = user['id']
                         response['group'] = user['group']
                         response['active'] = user['active']
+                        response['name'] = user['name']
                 
             return response
         
