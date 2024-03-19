@@ -6,10 +6,10 @@ from flask import Flask
 from flask_restful import Resource, Api
 from flask import request
 from flask_cors import CORS
+from view.upload_files import UploadHandler
 from view.user import UserHandler, UserSignInHandler, UsersHandler
 from view.products import ProductsHandler, ProductHandler
 from view.user_search import UsersSearchHandler
-
 
 app = Flask(__name__)
 CORS(app)
@@ -17,7 +17,10 @@ API = Api(app)
 
 cred = credentials.Certificate(
     './petmatchstore-firebase-adminsdk-em0x5-7643a471fa.json')
-firebase_admin.initialize_app(credential=cred)
+##firebase_admin.initialize_app(credential=cred)
+firebase_admin.initialize_app(cred, {
+    'storageBucket': 'petmatchstore.appspot.com'
+})
 
 @app.before_request
 def start_request():
@@ -37,6 +40,7 @@ class Index(Resource):
 
 
 API.add_resource(Index, '/', endpoint='index')
+API.add_resource(UploadHandler, '/upload', endpoint='upload')
 API.add_resource(UsersHandler, '/users', endpoint='users')
 API.add_resource(UserHandler, '/user/<user_id>', endpoint='user')
 API.add_resource(UserSignInHandler, '/user-sign-in', endpoint='user-sign-in')

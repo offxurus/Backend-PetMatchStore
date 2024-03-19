@@ -1,4 +1,3 @@
-"""Users tasks view"""
 from flask_restful import Resource
 from flask import request
 from models.products import Products
