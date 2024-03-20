@@ -6,4 +6,3 @@ firebase_admin
 mock-firestore
 pycryptodome
 PyJWT
-Flask-Uploads

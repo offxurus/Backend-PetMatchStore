@@ -34,23 +34,24 @@ class Products(object):
     
     @classmethod
     def get_next_cod(cls):
-        products = cls.get_products()
+        products, _ = cls.get_products()
         products_list = []
         for product in products:
             products_list.append(product.to_dict())
         last_cod = sorted(products_list, key=lambda x: x['code'])
         if last_cod:
-            return last_cod[0]['code'] + 1
+            return last_cod[-1]['code'] + 1
         else:
             return 1
     
     @classmethod
-    def get_products(cls):
+    def get_products(cls, offset=0):
         """
         Get products
         """
+        offset = offset if offset else 0
         return MainModule.get_firestore_db().collection(
-            cls._collection_name).limit(10).stream()
+            cls._collection_name).offset(offset).limit(10).stream(), offset + 10
     
     @classmethod
     def get_product(cls, product_id):

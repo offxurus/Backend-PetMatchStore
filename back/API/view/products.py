@@ -26,12 +26,14 @@ class ProductsHandler(Resource):
     def get(self):
         """Get Products"""
         try:
-            response = {"products": []}
-            products = Products.get_products()
+            response = {"products": [], "cursor": 0}
+            products, cursor = Products.get_products(int(request.args.get('offset')))
+            print("\n\nprintando",int(request.args.get('offset')))
             for product in products:
                 products_json = product.to_dict()
                 response['products'].append(products_json)
-
+            response['products'] = sorted(response['products'], key=lambda x: x['code'], reverse=True)
+            response['cursor'] = cursor       
             return response
 
         except Exception as error:
