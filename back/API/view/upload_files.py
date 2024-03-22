@@ -1,7 +1,10 @@
+import uuid
 from flask_restful import Resource
 from flask import request
 from firebase_admin import storage
 from models.products import Products
+
+
 
 
 
@@ -14,7 +17,8 @@ class UploadHandler(Resource):
             filename = ''
             if 'file' in request.files:
                 file = request.files['file']
-                filename = file.filename
+                filename = f'{str(uuid.uuid4().hex)}.{file.filename.split('.')[-1]}'
+                file.content_type
 
                 bucket = storage.bucket()
                 blob = bucket.blob(filename)
@@ -24,8 +28,6 @@ class UploadHandler(Resource):
                 download_url = blob.public_url
                 product.images.append(download_url)
                 product.save()
-                print('\n\nURL Público:', download_url)
-                print('\n\nblob', blob.__dict__)
             return {'path': download_url}
 
         except Exception as error:

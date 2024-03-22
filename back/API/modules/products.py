@@ -45,6 +45,8 @@ class ProductsModule(object):
             product.description = params['description']
         if params.get('rating'):
             product.rating = params['rating']
+        if params.get('images'):
+            product.images = params['images']
 
 
         product.save()
