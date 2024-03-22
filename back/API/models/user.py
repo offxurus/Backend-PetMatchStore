@@ -43,6 +43,13 @@ class User(object):
         if user.exists:
             return User(**user.to_dict())
         return None
+    
+    @classmethod
+    def get_user_by_cpf(cls, cpf):
+        """Get User by CPF"""
+        users = MainModule.get_firestore_db().collection(
+            cls._collection_name).where(u'cpf', u'==', cpf).stream()
+        return users
 
     @classmethod
     def get_user_by_email(cls, email):

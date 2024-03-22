@@ -97,19 +97,27 @@ class UserSignInHandler(Resource):
                 return {"message": "Bad request not params for user sign in"}, 400
             request_params = request.json
             response = {}
-            users = User.get_user_by_email(request_params['email'])
-            
+            if 'cpf' in request_params:
+                users = User.get_user_by_cpf(request_params['cpf'])
+            elif 'email' in request_params:
+                users = User.get_user_by_email(request_params['email'])
+            else:
+                return {"message": "CPF or email is required"}, 400
+
+            print("Found users:", users)
+
             for user in users:
-                if user:
-                    user = user.to_dict()
-                    if decrypt(user['password']) == request_params['password']:
-                        response['id'] = user['id']
-                        response['group'] = user['group']
-                        response['active'] = user['active']
-                        response['name'] = user['name']
-                
+                user = user.to_dict()
+                stored_password = user['password']
+                decrypted_stored_password = decrypt(stored_password) 
+                if decrypted_stored_password == request_params['password']:
+                    response['id'] = user['id']
+                    response['group'] = user['group']
+                    response['active'] = user['active']
+                    response['cpf'] = user['cpf'] if 'cpf' in request_params else None
+                    response['email'] = user['email'] if 'email' in request_params else None
+                response['password'] = decrypted_stored_password
             return response
-        
 
         except Exception as error:
             return {

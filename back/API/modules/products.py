@@ -17,7 +17,6 @@ class ProductsModule(object):
         products.price = params['price']
         products.quantity = params['quantity']
         products.active = True
-        products.image_default = params['images_default']
         products.description = params['description']
         products.rating = params['rating']
 
