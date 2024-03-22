@@ -14,6 +14,10 @@ class Products(object):
         self.price = args.get('price')
         self.quantity = args.get('quantity')
         self.active = args.get('active')
+        self.images = args.get('images',[])
+        self.image_default =args.get('image')
+        self.description = args.get('description')
+        self.rating = args.get('rating')
 
 
     def save(self):
@@ -29,7 +33,12 @@ class Products(object):
             'name': self.name,
             'price': self.price,
             'quantity': self.quantity,
-            'active': self.active
+            'active': self.active,
+            'images': self.images,
+            'image_default': self.image_default,
+            'rating':self.rating,
+            'description':self.description
+
         }
     
     @classmethod

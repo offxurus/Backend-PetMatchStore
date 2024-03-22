@@ -1,6 +1,7 @@
 from flask_restful import Resource
 from flask import request
 from firebase_admin import storage
+from models.products import Products
 
 
 
@@ -8,6 +9,8 @@ class UploadHandler(Resource):
     def post(self):
         """Upload a new file"""
         try:
+            product_id = (request.args.get('productId'))
+            product = Products.get_product(product_id)
             filename = ''
             if 'file' in request.files:
                 file = request.files['file']
@@ -19,6 +22,8 @@ class UploadHandler(Resource):
                 blob.make_public()
                 # Obtém o URL de download do arquivo enviado
                 download_url = blob.public_url
+                product.images.append(download_url)
+                product.save()
                 print('\n\nURL Público:', download_url)
                 print('\n\nblob', blob.__dict__)
             return {'path': download_url}

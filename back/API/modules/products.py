@@ -17,6 +17,9 @@ class ProductsModule(object):
         products.price = params['price']
         products.quantity = params['quantity']
         products.active = True
+        products.image_default = params['images_default']
+        products.description = params['description']
+        products.rating = params['rating']
 
         products.save()
         return products
@@ -37,6 +40,13 @@ class ProductsModule(object):
             product.quantity = params['quantity']
         if params.get('active') != None:
             product.active = params['active']
+        if params.get('image_default'):
+            product.image_default = params['image_default']
+        if params.get('description'):
+            product.description = params['description']
+        if params.get('rating'):
+            product.rating = params['rating']
+
 
         product.save()
         return product
