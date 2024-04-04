@@ -114,6 +114,7 @@ class UserSignInHandler(Resource):
                     response['id'] = user['id']
                     response['group'] = user['group']
                     response['active'] = user['active']
+                    response['name'] = user['name']
                     response['cpf'] = user['cpf'] if 'cpf' in request_params else None
                     response['email'] = user['email'] if 'email' in request_params else None
                 response['password'] = decrypted_stored_password
