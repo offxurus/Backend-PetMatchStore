@@ -1,6 +1,7 @@
 """Users view"""
 from flask_restful import Resource
 from flask import request
+from models.client import Client
 from modules.utils import decrypt
 from models.user import User
 
@@ -96,6 +97,31 @@ class UserSignInHandler(Resource):
             if not request.json:
                 return {"message": "Bad request not params for user sign in"}, 400
             request_params = request.json
+            request_params.get("group")
+            if(request_params.get("group")=='cliente'):
+                if 'email' in request_params:
+                    clients = Client.get_client_by_email(request_params['email'])
+                else:
+                    return {"message": "Email is required"}, 400
+
+                for client in clients:
+                    client = client.to_dict()
+                    stored_password = client['password']
+                    decrypted_stored_password = decrypt(stored_password) 
+                    if decrypted_stored_password == request_params['password']:
+                        response['id'] = client['id']
+                        response['group'] = client['group']
+                        response['active'] = client['active']
+                        response['name'] = client['name']
+                        response['birth_date'] = client['birth_date']
+                        response['gender'] = client['gender']
+                        response['billing_address'] = client['billing_address']
+                        response['delivery_address'] = client['delivery_address']
+                        response['cpf'] = client['cpf'] if 'cpf' in request_params else None
+                        response['email'] = client['email'] if 'email' in request_params else None
+                    response['password'] = decrypted_stored_password
+                return response
+
             response = {}
             if 'cpf' in request_params:
                 users = User.get_user_by_cpf(request_params['cpf'])
