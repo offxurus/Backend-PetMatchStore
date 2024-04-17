@@ -94,16 +94,17 @@ class UserSignInHandler(Resource):
     def post(self):
         """Sign in User"""
         try:
+            response = {}
             if not request.json:
                 return {"message": "Bad request not params for user sign in"}, 400
             request_params = request.json
-            request_params.get("group")
-            if(request_params.get("group")=='cliente'):
-                if 'email' in request_params:
-                    clients = Client.get_client_by_email(request_params['email'])
-                else:
-                    return {"message": "Email is required"}, 400
-
+            if 'email' in request_params:
+                clients = Client.get_client_by_email(request_params['email'])
+                users = User.get_user_by_email(request_params['email'])
+            else:
+                return {"message": "Email is required"}, 400
+            
+            if(clients):
                 for client in clients:
                     client = client.to_dict()
                     stored_password = client['password']
@@ -117,21 +118,11 @@ class UserSignInHandler(Resource):
                         response['gender'] = client['gender']
                         response['billing_address'] = client['billing_address']
                         response['delivery_address'] = client['delivery_address']
-                        response['cpf'] = client['cpf'] if 'cpf' in request_params else None
-                        response['email'] = client['email'] if 'email' in request_params else None
+                        response['cpf'] = client['cpf']
+                        response['email'] = client['email']
                     response['password'] = decrypted_stored_password
-                return response
-
-            response = {}
-            if 'cpf' in request_params:
-                users = User.get_user_by_cpf(request_params['cpf'])
-            elif 'email' in request_params:
-                users = User.get_user_by_email(request_params['email'])
-            else:
-                return {"message": "CPF or email is required"}, 400
-
-            print("Found users:", users)
-
+                    return response
+            
             for user in users:
                 user = user.to_dict()
                 stored_password = user['password']
@@ -141,8 +132,8 @@ class UserSignInHandler(Resource):
                     response['group'] = user['group']
                     response['active'] = user['active']
                     response['name'] = user['name']
-                    response['cpf'] = user['cpf'] if 'cpf' in request_params else None
-                    response['email'] = user['email'] if 'email' in request_params else None
+                    response['cpf'] = user['cpf']
+                    response['email'] = user['email']
                 response['password'] = decrypted_stored_password
             return response
 
