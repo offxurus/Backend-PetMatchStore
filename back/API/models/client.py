@@ -30,7 +30,7 @@ class Client(object):
         
     def to_dict(self):
         """Transform user in dict format"""
-        return {
+        json = {
             'id': self.id,
             'name': self.name,
             'email': self.email,
@@ -43,6 +43,10 @@ class Client(object):
             'billing_address': self.billing_address,
             'delivery_address': self.delivery_address
         }
+
+        for address in json.get("delivery_address"):
+            address['new_address'] = False
+        return json
     
     @classmethod
     def get_client(cls, client_id):
@@ -59,3 +63,10 @@ class Client(object):
         client = MainModule.get_firestore_db().collection(
             cls._collection_name).where(u'email', u'==', email).stream()
         return client
+    
+    @classmethod
+    def check_cpf_existence(cls, cpf):
+        """Check if cpf already exists"""
+        client = MainModule.get_firestore_db().collection(
+            cls._collection_name).where(u'cpf', u'==', cpf).stream()
+        return len(list(client))>0

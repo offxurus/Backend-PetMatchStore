@@ -15,7 +15,9 @@ class ClientsHandler(Resource):
             request_params = request.json
             if not request.json:
                 return {"message": "Bad request not params for client create"}, 400
-
+            if Client.check_cpf_existence(request_params['cpf']):
+                return {"message": "cpf already register"}, 400
+            
             clients = Client.get_client_by_email(request_params['email'])
             for client in clients:
                 if client.to_dict():
