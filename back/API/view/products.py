@@ -28,7 +28,6 @@ class ProductsHandler(Resource):
         try:
             response = {"products": [], "cursor": 0}
             products, cursor = Products.get_products(int(request.args.get('offset')))
-            print("\n\nprintando",int(request.args.get('offset')))
             for product in products:
                 products_json = product.to_dict()
                 response['products'].append(products_json)

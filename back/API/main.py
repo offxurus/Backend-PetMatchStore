@@ -6,6 +6,7 @@ from flask import Flask
 from flask_restful import Resource, Api
 from flask import request
 from flask_cors import CORS
+from view.order import OrderHandler
 from view.client import ClientsHandler, ClientHandler
 from view.upload_files import UploadHandler
 from view.user import UserHandler, UserSignInHandler, UsersHandler
@@ -50,6 +51,7 @@ API.add_resource(ProductHandler, '/products/<product_id>', endpoint='product')
 API.add_resource(UsersSearchHandler, '/search', endpoint='search')
 API.add_resource(ClientsHandler, '/clients', endpoint='clients')
 API.add_resource(ClientHandler, '/client/<client_id>', endpoint='client')
+API.add_resource(OrderHandler, '/shopping-cart', endpoint='shopping-cart')
 
 
 if __name__ == '__main__':
