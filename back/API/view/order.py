@@ -6,38 +6,41 @@ from modules.order import OrderModule
 
 class OrderHandler(Resource):
 
-    def post(self, order_id=None):
-        """Create or update an order"""
+    def post(self):
+        """Create an order"""
         try:
             if not request.json:
                 return {"message": "Bad request, no params for order"}, 400
             
-            if order_id:
-                order = Order.get_order(order_id)
-                if not order:
-                    return {"message": f"Order with id {order_id} not found"}, 404
-                
-                order_update = OrderModule.update(request.json, order)
-                return order_update.to_dict()
-            
-            else:
-                new_order = OrderModule.create(request.json)
-                return new_order.to_dict()
+            new_order = OrderModule.create(request.json)
+
+            return new_order.to_dict()
 
         except Exception as error:
             return {
-                'message': 'Error creating or updating an order',
+                'message': 'Error creating an order',
                 'details': str(error)
             }, 500
         
 
-    def get(self):
-        """Get Order"""
+    def get(self, order_id = None):
+        """Get Orders"""
         try:
-            order = Order.get_order()
-            if order:
-                return order.to_dict()
-            return {}
+            if not order_id:
+                response = {"orders": []}
+                orders = Order.get_order()
+                for order in orders:
+                    print(order.to_dict())
+                    orders_json = order.to_dict()
+                    response['orders'].append(orders_json)
+                return response
+            else:
+                order = Order.get_order(order_id)
+                if order:
+                    print(order.to_dict())
+                    return order.to_dict()
+                else:
+                    return {}
         except Exception as error:
             return {
                 'message': 'Error on get order',

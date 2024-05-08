@@ -1,5 +1,6 @@
 """ Order Module """
 from models.order import Order
+from datetime import datetime
 
 class OrderModule(object):
     """Order Module"""
@@ -12,8 +13,16 @@ class OrderModule(object):
         return orders: orders
         """
         order = Order()
-        order.products_order = params['products_order']
-        order.total_price = params['total_price']
+        order.id = params['id']
+        order.products_order = params['cartItems']
+        order.total = params['total']
+        order.currentUser = params['currentUser']
+        order.installments = params.get('installments')
+        order.defaultAddress = params['defaultAddress']
+        order.statusOrder = 'Aguardando pagamento'
+        order.freteValue = params['freteSelecionado']
+        order.dateOrder = datetime.now()
+        
 
         order.save()
         return order
@@ -29,8 +38,16 @@ class OrderModule(object):
 
         if params.get('products_order'):
             order.products_order = params['products_order']
-        if params.get('total_price'):
-            order.total_price = params['total_price']
+        if params.get('total'):
+            order.total = params['total']
+        if params.get('currentUser'):
+            order.currentUser = params['currentUser']
+        if params.get('installments'):
+            order.installments = params['installments']
+        if params.get('defaultAddress'):
+            order.defaultAddress = params['defaultAddress']
+        if params.get('freteSelecionado'):
+            order.freteValue = params['freteSelecionado']
 
         order.save()
         return order

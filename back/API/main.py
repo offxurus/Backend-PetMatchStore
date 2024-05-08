@@ -51,7 +51,8 @@ API.add_resource(ProductHandler, '/products/<product_id>', endpoint='product')
 API.add_resource(UsersSearchHandler, '/search', endpoint='search')
 API.add_resource(ClientsHandler, '/clients', endpoint='clients')
 API.add_resource(ClientHandler, '/client/<client_id>', endpoint='client')
-API.add_resource(OrderHandler, '/shopping-cart', endpoint='shopping-cart')
+API.add_resource(OrderHandler, '/orders', endpoint='orders')
+API.add_resource(OrderHandler, '/orders/<order_id>', endpoint='order')
 
 
 if __name__ == '__main__':
