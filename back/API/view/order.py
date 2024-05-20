@@ -30,14 +30,12 @@ class OrderHandler(Resource):
                 response = {"orders": []}
                 orders = Order.get_order()
                 for order in orders:
-                    print(order.to_dict())
                     orders_json = order.to_dict()
                     response['orders'].append(orders_json)
                 return response
             else:
                 order = Order.get_order(order_id)
                 if order:
-                    print(order.to_dict())
                     return order.to_dict()
                 else:
                     return {}

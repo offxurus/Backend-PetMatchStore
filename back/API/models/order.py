@@ -18,6 +18,7 @@ class Order(object):
         self.statusOrder = args.get('statusOrder')
         self.freteValue = args.get('freteSelecionado')
         self.dateOrder = args.get('dateOrder')
+        self.is_bolet = args.get('is_bolet')
 
 
     def save(self):
@@ -27,7 +28,7 @@ class Order(object):
         
     def to_dict(self):
         """Transform orders in dict format"""
-        return {
+        order_dict = {
             'id': self.id,
             'products_order': self.products_order,
             'total': self.total,
@@ -36,8 +37,14 @@ class Order(object):
             'defaultAddress': self.defaultAddress,
             'statusOrder': self.statusOrder,
             'freteSelecionado': self.freteValue,
-            'dateOrder': self.dateOrder.strftime('%Y-%m-%d') if self.dateOrder else None
+            'dateOrder': self.dateOrder,
+            'is_bolet': self.is_bolet
         }
+
+        if type(order_dict.get("dateOrder")) != str:
+            order_dict["dateOrder"] = order_dict["dateOrder"].strftime('%Y-%m-%d') if self.dateOrder else None
+
+        return order_dict
     
     
     

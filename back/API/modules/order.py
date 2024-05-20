@@ -21,6 +21,7 @@ class OrderModule(object):
         order.defaultAddress = params['defaultAddress']
         order.statusOrder = 'Aguardando pagamento'
         order.freteValue = params['freteSelecionado']
+        order.is_bolet = params.get('is_bolet', False)
         order.dateOrder = datetime.now()
         
 
@@ -36,18 +37,8 @@ class OrderModule(object):
         return order: updated order
         """       
 
-        if params.get('products_order'):
-            order.products_order = params['products_order']
-        if params.get('total'):
-            order.total = params['total']
-        if params.get('currentUser'):
-            order.currentUser = params['currentUser']
-        if params.get('installments'):
-            order.installments = params['installments']
-        if params.get('defaultAddress'):
-            order.defaultAddress = params['defaultAddress']
-        if params.get('freteSelecionado'):
-            order.freteValue = params['freteSelecionado']
+        if params.get('statusOrder'):
+            order.products_order = params['statusOrder']
 
         order.save()
         return order
