@@ -6,16 +6,19 @@ from modules.order import OrderModule
 
 class OrderHandler(Resource):
 
-    def post(self):
-        """Create an order"""
+    def post(self, order_id = None):
+        """Create or Update an order"""
         try:
             if not request.json:
                 return {"message": "Bad request, no params for order"}, 400
-            
-            new_order = OrderModule.create(request.json)
-
+            if not order_id:  
+                new_order = OrderModule.create(request.json)
+            elif order_id:
+                order = Order.get_order(order_id)
+                new_order = OrderModule.update(request.json, order)
+            if not order:
+                return {"message": "Bad request, not found"}, 404
             return new_order.to_dict()
-
         except Exception as error:
             return {
                 'message': 'Error creating an order',

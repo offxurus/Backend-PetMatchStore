@@ -38,7 +38,7 @@ class OrderModule(object):
         """       
 
         if params.get('statusOrder'):
-            order.products_order = params['statusOrder']
+            order.statusOrder = params['statusOrder']
 
         order.save()
         return order
