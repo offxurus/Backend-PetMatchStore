@@ -42,23 +42,25 @@ class Order(object):
         }
 
         if type(order_dict.get("dateOrder")) != str:
-            order_dict["dateOrder"] = order_dict["dateOrder"].strftime('%Y-%m-%d') if self.dateOrder else None
+            order_dict["dateOrder"] = order_dict["dateOrder"].strftime('%d-%m-%Y %H:%M') if self.dateOrder else None
 
         return order_dict
     
     
     
     @classmethod
-    def get_order(cls, order_id = None):
+    def get_order(cls, order_id=None):
         """
         Get order
         """
+        db = MainModule.get_firestore_db().collection(cls._collection_name)
+
         if order_id:
-            order = MainModule.get_firestore_db().collection(
-                cls._collection_name).document(order_id).get()
+            order = db.document(order_id).get()
             if order.exists:
                 return Order(**order.to_dict())
         else:
-            return MainModule.get_firestore_db().collection(
-                cls._collection_name).stream()
+            orders = db.order_by('dateOrder', direction='DESCENDING').stream()
+            return [Order(**order.to_dict()) for order in orders]
+
         return None
